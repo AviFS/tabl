@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="main.css"></link>
+    <script src="main.js"></script>
+    <script src="bf.js"></script>
+</head>
+<body>
+    <input type="text" id="progInp" oninput='onInput();'>
+    <input type="text" id="progOut" readonly>
+
+    <div id='evaluator'>
+    <div id='left'>
+        <textarea id="input" name="" rows=32 oninput='onInput();'></textarea>
+    </div>
+    <div id='right'>
+        <textarea id="output" name="" rows=32 readonly></textarea >
+    </div>
+    </div>
+</body>
+</html>
+
+<!--
+body 
+  evaluator 
+    left 
+      input 
+    right 
+      output 
+-->

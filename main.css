@@ -1,0 +1,74 @@
+/***** LAYOUT *****/
+body {
+    margin: 80px; /* Bad idea */
+    padding: 0px;
+}
+
+textarea {
+    width: 100%;
+    outline: none;
+    border: none;
+    resize: none;
+}
+
+#evaluator {
+    border: 4px solid;
+    border-radius: 10px;
+
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+#left, #right {
+    float: left;
+    /* height: 40px; */
+}
+
+#evaluator {
+    width: 80%;
+    margin: auto; /* Center */
+}
+
+#output {
+    text-align: right;
+}
+
+/***** ASSERT *****/
+/* EQUAL */
+#evaluator { height: 600px }
+#texarea   { height: 600px }
+
+/* SUM == 100% */
+#left  { width: 50% }
+#right { width: 50% }
+
+/***** FONTS *****/
+textarea {
+    font-size: 16px;
+    font-family: Menlo, monospace;
+}
+
+/***** COLORS *****/
+#output               { color: #95E6CB; }
+#input                { color: #73D0FF; }
+#evaluator { background-color: #1F2430; }
+textarea   { background-color: #1F2430; }
+body       { background-color: #0A0E14; }
+#evaluator     { border-color: #0A0E14; }
+
+
+
+input {
+    background-color: #1F2430;
+    border: none;
+    font-size: 16px;
+    font-family: Menlo, monospace;
+    color: grey;
+    margin-bottom: 20px;
+}
+
+#progOut {
+    float: right;
+}
