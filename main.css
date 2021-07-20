@@ -72,3 +72,9 @@ input {
 #progOut {
     float: right;
 }
+
+#title {
+    color: #c0c0c0;
+    font-family: Menlo, monospace;
+    text-align: center;
+}

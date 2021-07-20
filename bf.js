@@ -10,6 +10,7 @@ And it should print the values of the loop the first time around
 Input in upper left corner
 Output in upper right corner
 
+window.location.hash.slice(1)
 There could be a feature to toggle where when you ouput
 it makes a little bubble to the left of that line with the output text in it
 */
@@ -24,17 +25,7 @@ if it's turned ouff by defualt and you have 3 inc doe, it turns  on
 */
 
 
-function onInput() {
-
-    var inp = document.getElementById('input').value;
-    var out = document.getElementById('output');
-        //out.innerHTML=interp(inp);
-        out.innerHTML='';
-        interp(inp);
-    
-}
-
-function logWithHTML(tape, ptr) {
+function logBFWithHTML(tape, ptr) {
     var asterisk = true;
     var num =  5;
     var debug = '';
@@ -49,23 +40,21 @@ function logWithHTML(tape, ptr) {
     return debug;
 }
 
-function log(tape, ptr) {
+function logBF(tape, ptr) {
     var debug = '';
     var curr;
-    for (var i = 0; i < 6; i++) {
+    for (var i = 0; i < 5; i++) {
         curr = tape[i].toString().padStart(3, ' ');
         if (i == ptr) { curr += '*'; }
         else { curr += ' '; }
         if (curr=="  0 ") { curr = '  _ '; }
         if (curr=="  0*") { curr = '  _*'; }
-        console.log(curr);
         debug += curr + '    ';
     }
     return debug;
 }
 
 function bf(code, input) {
-    console.log(code);
     var tape = new Array(30000).fill(0); 
     var ptr = 0; var inputIndex = 0;
     var output = '';
@@ -82,7 +71,7 @@ function bf(code, input) {
         if (c == "]") { bf2js += "}"; }
         bf2js += "tape[ptr]=(tape[ptr]+256)%256;";
     }
-    bf2js += "return [output, log(tape, ptr)];} compile();"
+    bf2js += "return [output, logBF(tape, ptr)];} compile();"
     return eval(bf2js);
 }
 
@@ -96,7 +85,6 @@ function interpBF(input) {
     var stdin = document.getElementById("progInp").value;
     
     var lines = input.split('\n');
-    // console.log(lines);
     var acc = "";
     var result;
     for (line of lines) {
