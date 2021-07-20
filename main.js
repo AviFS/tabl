@@ -1,3 +1,19 @@
+var langs = {
+    "bf": "interpBF",
+    "brainfuck": "interpBF",
+    "slashes": "interpSlashes",
+    "js": "interpJS",
+    "javascript": "interpJS",
+    "calc": "interpJS",
+}
+
+var interp;
+
+function init() {
+    var def = "interpBF"; // default interpreter
+    interp = eval(langs[window.location.hash.slice(1)] || def);
+    interp(document.getElementById("input").value);
+}
 
 function onInput() {
 
@@ -9,8 +25,7 @@ var out = document.getElementById('output');
 
 }
 
-/*
-function interp(input) {
+function interpJS(input) {
     
 var inp = document.getElementById('input').value;
 var out = document.getElementById('output');
@@ -30,5 +45,3 @@ var out = document.getElementById('output');
         out.innerHTML+=result+'\n';
     }
 }
-
-*/

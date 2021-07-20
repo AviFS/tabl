@@ -60,7 +60,7 @@ function slash(prog) {
 
 
 
-function interp(input) {
+function interpSlashes(input) {
     
     var inp = document.getElementById('input').value;
     var out = document.getElementById('output');

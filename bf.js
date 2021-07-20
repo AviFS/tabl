@@ -87,7 +87,7 @@ function bf(code, input) {
 }
 
 
-function interp(input) {
+function interpBF(input) {
         
     var inp = document.getElementById('input').value;
     var out = document.getElementById('output');
@@ -95,7 +95,7 @@ function interp(input) {
 
     var stdin = document.getElementById("progInp").value;
     
-    lines = input.split('\n');
+    var lines = input.split('\n');
     // console.log(lines);
     var acc = "";
     var result;
