@@ -1,11 +1,20 @@
 var langs = {
+
     "bf": "interpBF",
     "brainfuck": "interpBF",
+    
     "slashes": "interpSlashes",
+
     "js": "interpJS",
     "javascript": "interpJS",
     "calc": "interpJS",
-    "muck": "interpMuck"
+
+    "muck": "interpMuck",
+
+    "frink": "interpInsect",
+    "insect": "interpInsect",
+    "unit": "interpInsect",
+    "units": "interpInsect",
 }
 
 var interp;
