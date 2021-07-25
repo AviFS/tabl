@@ -87,7 +87,7 @@ function altbf(code, input) {
         if (c == "-") { tape[ptr]--; }
         if (c == ">") { ptr++; }
         if (c == "<") { ptr--; }
-        if (c == ",") { output += input.codePointAt(inputIndex); inputIndex++; }
+        if (c == ",") { tape[ptr] = input.codePointAt(inputIndex); inputIndex++; }
         if (c == ".") { output += String.fromCodePoint(tape[ptr]); }
         if (c == "[") { bracks.push(i); }
         if (c == "]") {
