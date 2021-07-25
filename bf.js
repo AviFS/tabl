@@ -95,11 +95,13 @@ function altbf(code, input) {
             else {
                 if (tape[ptr] == 0) {
                     currLoopIterations = 0;
+                    bracks.pop();
                 }
                 // One less than a multiple of 256. It's 256*5-1
                 // That way, a loop like [<+>] won't change the state. It'll just loop back around
                 else if (currLoopIterations > 1279) {
                     currLoopIterations = 0;
+                    bracks.pop();
                     console.log(`You passed 1279 iterations at index ${i}. Exiting to prevent infinite loop.`)
                 }
                 else {
