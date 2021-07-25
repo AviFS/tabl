@@ -75,6 +75,46 @@ function bf(code, input) {
     return eval(bf2js);
 }
 
+function altbf(code, input) {
+    var tape = new Array(30000).fill(0); 
+    var ptr = 0; var inputIndex = 0;
+    var output = '';
+    var bracks = [];
+    currLoopIterations = 0;
+    for (var i = 0; i < code.length; i++) {
+        var c = code[i];
+        if (c == "+") { tape[ptr]++; }
+        if (c == "-") { tape[ptr]--; }
+        if (c == ">") { ptr++; }
+        if (c == "<") { ptr--; }
+        if (c == ",") { output += input.codePointAt(inputIndex); inputIndex++; }
+        if (c == ".") { output += String.fromCodePoint(tape[ptr]); }
+        if (c == "[") { bracks.push(i); }
+        if (c == "]") {
+            if (bracks.length == 0) { console.log("Mismatched brackets: Unmatched ']' at index "+i+"."); }
+            else {
+                if (tape[ptr] == 0) {
+                    currLoopIterations = 0;
+                }
+                // One less than a multiple of 256. It's 256*5-1
+                // That way, a loop like [<+>] won't change the state. It'll just loop back around
+                else if (currLoopIterations > 1279) {
+                    currLoopIterations = 0;
+                    console.log(`You passed 1279 iterations at index ${i}. Exiting to prevent infinite loop.`)
+                }
+                else {
+                    i = bracks.pop()-1; // i = ...-1 makes up for the i++ in the for loop
+                    currLoopIterations++;
+                }
+            }
+        }
+
+        tape[ptr]+=256; tape[ptr]%=256; // takes care of negatives, eg -1 -> 255
+    }
+
+    // for (const b of bracks) { console.log("Mismatched brackets: Unmatched '[' at index "+i+"."); }
+    return {"output": output, "tape": tape, "ptr": ptr, "log": logBF(tape, ptr)}
+}
 
 function interpBF(input) {
         
@@ -89,11 +129,11 @@ function interpBF(input) {
     var result;
     for (line of lines) {
         acc += line;
-        var [output, state] =  bf(acc, stdin);
+        var runner =  altbf(acc, stdin);
         if (line == '' || line.includes('\\') || !/[\+\-\.\>\<\,\[\]\#]/.test(line)) {result='';}
-        else {result = state;}
+        else {result = runner.log;}
         out.innerHTML+=result+'\n';
-        o.value = output;
+        o.value = runner.output;
         
     }
 }
