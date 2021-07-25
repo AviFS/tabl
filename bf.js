@@ -65,7 +65,7 @@ function bf(code, input) {
         if (c == "-") { bf2js += "tape[ptr]--;"; }
         if (c == ">") { bf2js += "ptr++;"; }
         if (c == "<") { bf2js += "ptr--;"; }
-        if (c == ",") { bf2js += "tape[ptr] = input.codePointAt(inputIndex);"; }
+        if (c == ",") { bf2js += "tape[ptr] = input.codePointAt(inputIndex); inputIndex++;"; }
         if (c == ".") { bf2js += "output += String.fromCodePoint(tape[ptr]);"; }
         if (c == "[") { bf2js += "while (tape[ptr]) {"; }
         if (c == "]") { bf2js += "}"; }
