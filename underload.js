@@ -1,124 +1,82 @@
-// FROM: https://cdn.rawgit.com/graue/esofiles/7ca16941/underload/underload.html
-// Released to the public domain.
-var s= {'value': ''};//document.getElementById('stack');
-var p='';//document.getElementById('prog');
-var p = {'value': 'UNDEFINED: SHOULD BE PASSED AS PARAMETER.'};
-var o= {'value': ''};//document.getElementById('op');
+/* FROM: https://esolangs.org/wiki/Underload
+~ : (x) (y) — (y) (x)
+    Swap the top two elements of the stack.
+: : (x) — (x) (x)
+    Duplicate the top element of the stack.
+! : (x) —
+    Discard the top element of the stack.
+* : (x) (y) — (xy)
+    Concatenate the top element of the stack to the end of the second element of the stack.
+(x) : — (x)
+    Push everything between the ( and the matching ) on top of the stack.
+a : (x) — ((x))
+    Enclose the top element of the stack in a pair of parentheses.
+^ : (x) — x
+    When the ^ command is called, include the top element of the stack into the program rather than the stack, immediately after the ^ command, ready to be run next; this effectively pops the stack.
+S : (x) —
+    Output the top element of the stack, popping it.
+*/
 
-var startrun = 'none';//document.getElementById('startrun').style.display="none";
-var stoprun='block';//document.getElementById('stoprun').style.display="block";
-
-function pop(s)
-{
-  if(s.value.indexOf("<>")==-1) {throw("ERROR: Empty stack");}
-  var t=s.value.substr(0,s.value.indexOf("<>"));
-  s.value=s.value.substr(s.value.indexOf("<>")+2);
-  return t;
-}
-function push(s,t)
-{
-  s.value=t+"<>"+s.value;
-}
-function step(lp, p)
-{
-    s= {'value': ''};//document.getElementById('stack');
-    o= {'value': ''};//document.getElementById('op')
-try {
-  if(lp)
-  {
-
-  }
-
-  var c=p.value.substr(0,1);
-  if(p.value=="") throw("Program terminated normally.");
-  p.value=p.value.substr(1);
-  if(c=='S') o.value+=pop(s);
-  else if(c=='~') {var t1, t2; t1=pop(s); t2=pop(s); push(s,t1); push(s,t2);}
-  else if(c==':') {var t1; t1=pop(s); push(s,t1); push(s,t1);}
-  else if(c=='!') pop(s);
-  else if(c=='*') {var t1, t2; t1=pop(s); t2=pop(s); push(s,t2+t1);}
-  else if(c=='a') {var t1; t1=pop(s); push(s,"("+t1+")");}
-  else if(c=='^') p.value=pop(s)+p.value;
-  else if(c==')') throw("ERROR: Unmatched )");
-  else if(c=='(')
-  {
-    var t1,i,n;
-    i=0; n=1;
-    while(n)
-    {
-      if(p.value.substr(i,1)==')') n--;
-      if(p.value.substr(i,1)=='(') n++;
-      i++;
-      if(i>p.value.length) throw("ERROR: Unmatched (");
+function underload(prog) {
+    var errors = 0;
+    function checkPop(n) {
+      if (stack.length >= n) { return true; }
+      console.log(`Error: Tried to pop ${n} elems from stack with ${stack.length} elems`)
+      errors++;
+      return false;
     }
-    t1=p.value.substr(0,i-1);
-    p.value=p.value.substr(i);
-    push(s,t1);
-  }
-  else if(c=='<') throw("Program stopped by user."); // abort of program
-  else throw("ERROR: Unrecognized command");
-  if(lp) window.setTimeout("step("+lp+")",lp);
-}
-catch(s)
-{
-  console.log(s);i
-  startrun = 'block';
-  stoprun = 'block';
-//   document.getElementById('startrun').style.display="block";
-//   document.getElementById('stoprun').style.display="none";
-}
-return {'output': o.value, 'log': s.value.slice(0,-2)};
-}
-function abortrun()
-{
-  p.value='<'+p.value;
-}
-function unl2ul()
-{
-  var v=new Array();
-  var vi=0;
-  var o="";
-  var c;
-  while(p.value!="")
-  {
-    c=p.value.substr(0,1);
-    p.value=p.value.substr(1);
-    if(c=='`') v[vi++]=0;
-    if(c=='.') {o+='.'; c=p.value.substr(0,1); p.value=p.value.substr(1);}
-    else if(c=='`') continue;
-    o+=c;
-    while(1)
-    {
-      if(v[vi-1]) {o+='`'; vi--;}
-      else {v[vi-1]=1; break;}
+  
+    prog = Array.from(prog);
+    var curr;
+    var out = '';
+    var stack = [];
+
+    const MAX_ITERS = 2560;
+    var iters = 0;
+
+    while (prog!='') {
+        iters++;
+        if (iters > 2560) { console.log("Exceeded MAX_ITERS: " + MAX_ITERS + "."); errors++; break; }
+        // I think prog is just being shifted/unshifted. Maybe reverse it and use pop/push instead?
+        curr = prog.shift();
+        console.log(curr);
+        if (curr=='~') { if (checkPop(2)) { console.log(1999); var a = stack.pop(); var b = stack.pop(); stack.push(a); stack.push(b); }}
+        if (curr==':') { if (checkPop(1)) { var a = stack.pop(); stack.push(a); stack.push(a); }}
+        if (curr=='!') { if (checkPop(1)) { stack.pop(); }}
+        if (curr=='*') { if (checkPop(2)) { var a = stack.pop(); var b = stack.pop(); stack.push(String(a)+String(b)); }} // a+b or b+a?
+        if (curr=='a') { if (checkPop(1)) { var a = stack.pop(); stack.push("("+String(a)+")"); }}
+        if (curr=='^') { if (checkPop(1)) { var a = stack.pop(); prog.unshift(a); }}
+        if (curr=='S') { if (checkPop(1)) { var a = stack.pop(); out+=a; }}
+        if (curr==')') { console.log("Error: Unmatched ')'"); errors++; }
+        if (curr=='(') {
+          // assumes they haven't finished typing yet, so we don't want to start throwing errors
+          // eg while typing (abcd) or (String) you'd get errors or weird output for the 'a' and 'S' which would be intepreted literally
+          if (!prog.includes(')')) { break; } 
+          else {
+            console.log(323);
+            var parens = '';
+            while (parens[parens.length-1]!=')') { parens += prog.shift();console.log(parens); }
+            stack.push(parens.slice(0,-1));
+          }
+        }
     }
-  }
-  while(vi>0) {o+='`'; vi--;}
-  while(o!="")
-  {
-    c=o.substr(0,1);
-    o=o.substr(1);
-    if(c=='`') p.value+='~^';
-    if(c=='s') p.value+='((:)~*(~)*a(~*(~^)*)*)';
-    if(c=='k') p.value+='(a(!)~*)';
-    if(c=='i') p.value+='()';
-    if(c=='.')
-    {
-      c=o.substr(0,1);
-      o=o.substr(1);
-      p.value+='(('+c+')S)';
+    function logStack() {
+      // Pretty print list
+      /*
+      var log = '["';
+      while (stack.length>1) { log+=stack.pop(); log+='", "'; }
+      log+=stack.pop(); log += '"]';
+      */
+      var log = '';
+      while (stack.length>1) { log+=stack.pop(); log+=' '; }
+      if (stack.length>0) { log+=stack.pop(); }
+      // Add '?' for errors
+      log = errors==0? log: ('?'.repeat(errors)) + ' ' + log;
+      return log;
     }
-  }
+    
+    return {'output': out, 'log': logStack()};
 }
-
-// function step(n, prog) {
-//     var curr;
-//     while (prog!='') {
-//         curr = prog.pop();
-
-
-//     }
-// }
 
 
 function interpUnderload(input) {
@@ -135,7 +93,7 @@ function interpUnderload(input) {
     var result;
     for (line of lines) {
         acc += line;
-        var runner =  step(0, {'value': acc});
+        var runner =  underload(acc);
         console.log(runner);
         if (line == '' || !/[~:!*()a^S]/.test(line)) {result='';}
         else {result = runner.log;}
