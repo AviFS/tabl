@@ -5,7 +5,8 @@ var langs = {
     "js": "interpJS",
     "javascript": "interpJS",
     "calc": "interpJS",
-    "muck": "interpMuck"
+    "muck": "interpMuck",
+    "underload": "interpUnderload",
 }
 
 var interp;
