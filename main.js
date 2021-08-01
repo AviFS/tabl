@@ -20,7 +20,8 @@ function setInterp(lang) {
     interp = eval(langs[lang] || defaultInterp(lang));
     document.getElementById('output').innerHTML = '';
     interp(document.getElementById("input").value);
-    document.getElementById("title").innerHTML = langs[lang] || defaultInterp(lang);
+    // Commenting/Uncommenting this line toggles whether to display a title
+    // document.getElementById("title").innerHTML = langs[lang] || defaultInterp(lang);
 }
 
 function init() {
