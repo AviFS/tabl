@@ -103,6 +103,7 @@ function underload(prog) {
 
 
 function interpUnderload(input) {
+    // Input gets prepended
 
     var inp = document.getElementById('input').value;
     var out = document.getElementById('output');
@@ -116,7 +117,7 @@ function interpUnderload(input) {
     var result;
     for (line of lines) {
         acc += line;
-        var runner =  underload(acc);
+        var runner =  underload(stdin+acc);
         console.log(runner);
         if (line == '' || !/[~:!*()a^S]/.test(line)) {result='';}
         else {result = runner.log;}
