@@ -1,7 +1,11 @@
+* {
+    font-family: Menlo, monospace;
+}
 /***** LAYOUT *****/
 body {
     margin: 80px; /* Bad idea */
     padding: 0px;
+    font-family: Menlo, monospace;
 }
 
 textarea {
@@ -64,7 +68,6 @@ input {
     background-color: #1F2430;
     border: none;
     font-size: 16px;
-    font-family: Menlo, monospace;
     color: grey;
     margin-bottom: 20px;
 }
@@ -75,6 +78,23 @@ input {
 
 #title {
     color: #c0c0c0;
-    font-family: Menlo, monospace;
     text-align: center;
+}
+
+
+#theme-list {
+    /* margin: 0 auto; */
+    text-align: left;
+    width: 75%;
+}
+
+#theme-list>a {
+    /* color: #C0C0C0; */
+    color: rgb(115, 145, 175);
+    /* color: #95afc0; */
+    text-decoration: none;
+}
+
+#theme-list>a:hover{
+    color: #6ab3e7;
 }

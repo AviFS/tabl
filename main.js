@@ -16,11 +16,16 @@ function defaultInterp(lang) {
     return "interpBF";
 }
 
-function init() {
-    langHash = window.location.hash.slice(1);
-    interp = eval(langs[langHash] || defaultInterp(langHash));
+function setInterp(lang) {
+    interp = eval(langs[lang] || defaultInterp(lang));
+    document.getElementById('output').innerHTML = '';
     interp(document.getElementById("input").value);
-    document.getElementById("title").innerHTML = langs[langHash] || defaultInterp(langHash);
+    document.getElementById("title").innerHTML = langs[lang] || defaultInterp(lang);
+}
+
+function init() {
+    lang = window.location.hash.slice(1);
+    setInterp(lang);
 }
 
 function onInput() {
