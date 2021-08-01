@@ -36,7 +36,7 @@ function underload(prog) {
 
     while (prog!='') {
         iters++;
-        if (iters > 2560) { console.log("Exceeded MAX_ITERS: " + MAX_ITERS + "."); errors++; break; }
+        if (iters > 2560) { console.log("Exceeded MAX_ITERS: " + MAX_ITERS + "."); errors++; return 0; }
         // I think prog is just being shifted/unshifted. Maybe reverse it and use pop/push instead?
         curr = prog.shift();
         console.log(curr);
@@ -49,16 +49,39 @@ function underload(prog) {
         if (curr=='S') { if (checkPop(1)) { var a = stack.pop(); out+=a; }}
         if (curr==')') { console.log("Error: Unmatched ')'"); errors++; }
         if (curr=='(') {
-          // assumes they haven't finished typing yet, so we don't want to start throwing errors
-          // eg while typing (abcd) or (String) you'd get errors or weird output for the 'a' and 'S' which would be intepreted literally
-          if (!prog.includes(')')) { break; } 
-          else {
-            console.log(323);
-            var parens = '';
-            while (parens[parens.length-1]!=')') { parens += prog.shift();console.log(parens); }
-            stack.push(parens.slice(0,-1));
+          // FROM: https://github.com/graue/esofiles/blob/master/underload/underload.html
+            var t1,i,n;
+            i=0; n=1;
+            prog = prog.join('');
+            console.log(prog);
+            while(n) {
+              if(prog.substr(i,1)==')') n--;
+              if(prog.substr(i,1)=='(') n++;
+              i++;
+              if(i>prog.length) { prog = ''; break; /*console.log("Error: Unmatched (");*/ }
+            }
+            t1=prog.substr(0,i-1);
+            prog=prog.substr(i);
+            stack.push(t1);
           }
-        }
+          prog = Array.from(prog);
+        // ORIGINAL: haven't gotten it to work
+        // assumes they haven't finished typing yet, so we don't want to start throwing errors
+        // eg while typing (abcd) or (String) you'd get errors or weird output for the 'a' and 'S' which would be intepreted literally
+        //   if (!prog.includes(')')) { break; } 
+        //   else {
+        //     console.log(323);
+        //     var parens = ''; // string in parens
+        //     var nesting = 1; // nesting level
+        //     // TODO: This won't output errors for something like `(sd(sd)`
+        //     while (prog!='' || parens[parens.length-1]!=')' && nesting <= 0) {
+        //       parens += prog.shift();console.log(parens);
+        //       if (parens[parens.length-1]==')') { nesting--; }
+        //       if (parens[parens.length-1]=='(') { nesting++; }
+        //     }
+        //     stack.push(parens.slice(0,-1));
+        //   }
+        // }
     }
     function logStack() {
       // Pretty print list
