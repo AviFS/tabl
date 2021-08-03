@@ -7,6 +7,7 @@ var langs = {
     "calc": "interpJS",
     "muck": "interpMuck",
     "underload": "interpUnderload",
+    "stack": "interpStack",
 }
 
 var interp;
