@@ -8,6 +8,7 @@ var langs = {
     "muck": "interpMuck",
     "underload": "interpUnderload",
     "stack": "interpStack",
+    "tio": "interpTIO",
 }
 
 var interp;
